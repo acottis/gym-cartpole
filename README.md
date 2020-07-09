@@ -1,2 +1,2 @@
 # gym-cartpole
-Solving Gym's cart pole with random seeding data and and Neural Network
+Solving Gym's cart pole game with random seeded sucessfull data and a Neural Network
