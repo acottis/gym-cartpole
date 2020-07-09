@@ -1,41 +1,46 @@
 import gym
 import numpy as np
-from cartnn import load_npy, train_model, predict_action
+from cartnn import Agent
 import time
 
 ATTEMPTS = 10
-EPOCH = 300
+class play_cart():
 
-def setup_nn():
-    train_features, train_labels = load_npy()
-    model = train_model(train_features, train_labels, epoch=EPOCH)
-    return model
+    def __init__(self):
+        self.nn_agent = self.setup_nn()
+        self.play_nn()
 
-def choose_action(observation):
-    obs = np.reshape(observation, [1,4])
-    action = predict_action(model, obs)
-    return action
+    def setup_nn(self):
+        agent = Agent()
+        return agent
 
-def play_nn():
-    env = gym.make('CartPole-v0')
-    for attempt in range(ATTEMPTS):  
-        env.reset()
-        done = False
-        total_reward = 0
-        action = 0
+    def choose_action(self, observation):
+        obs = np.reshape(observation, [1,4])
+        action = self.nn_agent.predict_action(obs)
+        return action
 
-        while not done:
-            #env.render()
-            #time.sleep(0.1)
-            obs, reward, done,_ = env.step(action)
-            action = choose_action(obs)
-            #print(action)
-            total_reward += reward
+    def play_nn(self):
+        env = gym.make('CartPole-v0')
+        for attempt in range(ATTEMPTS):  
+            env.reset()
+            done = False
+            total_reward = 0
+            action = 0
 
-            if done:
-                print(total_reward)
-    env.close()
+            while not done:
+                #env.render()
+                #time.sleep(0.1)
+                obs, reward, done,_ = env.step(action)
+                action = self.choose_action(obs)
+                #print(action)
+                total_reward += reward
 
-model = setup_nn()
-play_nn()
+                if done:
+                    print(total_reward)
+        env.close()
+
+
+
+if __name__ == "__main__":
+    play_cart()
 

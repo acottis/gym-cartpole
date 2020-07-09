@@ -3,38 +3,60 @@ from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
 
-def load_npy():
-    actions = np.load('actions.npy')
-    obs = np.load('obs.npy')
+# Global vars
+EPOCH = 30
 
-    return obs, actions
+class Agent():
+
+    def __init__(self):
+        self.epoch = EPOCH
+        self.train_obs, self.train_actions, self.test_obs, self.test_actions = self.load_npy() 
+        self.model = self.train_model(train_features=self.train_obs, train_labels=self.train_actions)
+        print("Trained Neural network has accuracy: {0}%".format(self.get_accuracy()))
+        
+    def load_npy(self):
+        actions = np.load('actions.npy')
+        obs = np.load('obs.npy')
+
+        split = int(len(actions)/10)
+
+        train_actions = actions[:-split]
+        test_actions = actions[-split:]
+
+        train_obs = obs[:-split]
+        test_obs = obs[-split:]
+
+        return train_obs, train_actions, test_obs, test_actions
+
+
+
+    def train_model(self, train_features, train_labels):  
+        model = keras.Sequential([
+                            keras.layers.Flatten(),
+                            keras.layers.Dense(80, activation=tf.nn.relu),
+                            keras.layers.Dense(2, activation=tf.nn.softmax)])
+        model.compile(
+                    optimizer=tf.optimizers.Adam(), 
+                    loss='sparse_categorical_crossentropy', 
+                    metrics=['accuracy'])
+
+        model.fit(train_features, train_labels, epochs=self.epoch, callbacks=myCallback())
+
+        return model
+
+    def predict_action(self, observation):
+        pred = self.model.predict(observation)
+        action = np.argmax(pred)
+
+        return action
+
+    def get_accuracy(self):
+        acc = self.model.evaluate(self.test_obs, self.test_actions)
+        return round(acc[1], 4)*100
 
 class myCallback(tf.keras.callbacks.Callback):
   def on_epoch_end(self, epoch, logs={}):
-    if(logs.get('accuracy')>0.65):
-      print("\nReached 60% accuracy so cancelling training!")
-      self.model.stop_training = True
-
-def train_model(train_features, train_labels, epoch):  
-    model = keras.Sequential([
-                        keras.layers.Flatten(),
-                        keras.layers.Dense(80, activation=tf.nn.relu),
-                        keras.layers.Dense(2, activation=tf.nn.softmax)])
-    model.compile(
-                optimizer=tf.optimizers.Adam(), 
-                loss='sparse_categorical_crossentropy', 
-                metrics=['accuracy'])
-
-    model.fit(train_features, train_labels, epochs=epoch, callbacks=myCallback())
-
-    return model
-
-def predict_action(model, observation):
-    pred = model.predict(observation)
-    action = np.argmax(pred)
-    
-    return action
-
-# train_features, train_labels = load_csv()
-# model = train_model(train_features, train_labels)
-# predict(model, np.array([[0.04775006, -0.55116988, -0.17562298,0.17487943]]))
+    if(logs.get('loss')>0.38):
+    #   print("\nReached goal stopping neural net!")
+    #   self.model.stop_training = True
+      pass
