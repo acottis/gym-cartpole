@@ -1,13 +1,13 @@
 import gym
 import numpy as np
-from cartnn import load_csv, train_model, predict_action
+from cartnn import load_npy, train_model, predict_action
 import time
 
 ATTEMPTS = 10
-EPOCH = 5
+EPOCH = 20
 
 def setup_nn():
-    train_features, train_labels = load_csv()
+    train_features, train_labels = load_npy()
     model = train_model(train_features, train_labels, epoch=EPOCH)
     return model
 

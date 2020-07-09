@@ -3,24 +3,12 @@ from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
 
-def load_csv():
-    np.set_printoptions(linewidth=200)
-    data= np.loadtxt('inputs.csv',delimiter=",", dtype='str')
-    data = np.transpose(data)
+def load_npy():
+    actions = np.load('actions.npy')
+    obs = np.load('obs.npy')
 
-    obs, actions = data
-    cleaned_obs = []
-
-    for o in obs:
-        o = o.replace('[','')
-        o = o.replace(']','')
-        o = o.split()
-        cleaned_obs.append(o)
-
-    train_features = np.array(cleaned_obs, dtype='float')
-    train_labels = np.array(actions, dtype='int')
-
-    return train_features, train_labels
+    return obs, actions
+    
 
 def train_model(train_features, train_labels, epoch):  
     model = keras.Sequential([
@@ -34,7 +22,6 @@ def train_model(train_features, train_labels, epoch):
 
     model.fit(train_features, train_labels, epochs=epoch)
 
-    #test_features = np.array([[0.04775006, -0.55116988, -0.17562298,0.17487943]])
     return model
 
 def predict_action(model, observation):
@@ -45,5 +32,3 @@ def predict_action(model, observation):
 # train_features, train_labels = load_csv()
 # model = train_model(train_features, train_labels)
 # predict(model, np.array([[0.04775006, -0.55116988, -0.17562298,0.17487943]]))
-
-
