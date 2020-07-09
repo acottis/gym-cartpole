@@ -4,7 +4,7 @@ from cartnn import load_npy, train_model, predict_action
 import time
 
 ATTEMPTS = 10
-EPOCH = 20
+EPOCH = 300
 
 def setup_nn():
     train_features, train_labels = load_npy()
@@ -27,7 +27,6 @@ def play_nn():
         while not done:
             #env.render()
             #time.sleep(0.1)
-
             obs, reward, done,_ = env.step(action)
             action = choose_action(obs)
             #print(action)

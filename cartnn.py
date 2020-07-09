@@ -8,7 +8,12 @@ def load_npy():
     obs = np.load('obs.npy')
 
     return obs, actions
-    
+
+class myCallback(tf.keras.callbacks.Callback):
+  def on_epoch_end(self, epoch, logs={}):
+    if(logs.get('accuracy')>0.65):
+      print("\nReached 60% accuracy so cancelling training!")
+      self.model.stop_training = True
 
 def train_model(train_features, train_labels, epoch):  
     model = keras.Sequential([
@@ -20,13 +25,14 @@ def train_model(train_features, train_labels, epoch):
                 loss='sparse_categorical_crossentropy', 
                 metrics=['accuracy'])
 
-    model.fit(train_features, train_labels, epochs=epoch)
+    model.fit(train_features, train_labels, epochs=epoch, callbacks=myCallback())
 
     return model
 
 def predict_action(model, observation):
     pred = model.predict(observation)
     action = np.argmax(pred)
+    
     return action
 
 # train_features, train_labels = load_csv()
