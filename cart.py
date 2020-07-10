@@ -1,6 +1,6 @@
 import gym
 import numpy as np
-from cartnn import NN_Agent
+from cart_nn import NN_Agent
 from cart_classifers import SVM_Agent, NB_Agent, DT_Agent, Ensemble_Agent
 from cart_rng_agent import Random_Agent
 import time
