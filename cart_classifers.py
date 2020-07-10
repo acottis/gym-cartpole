@@ -10,12 +10,13 @@ class Classifer():
         self.model = self.init_model()
         self.train_obs, self.train_actions, self.test_obs, self.test_actions = self.load_npy()
         self.train_model()
-        print("{0} has accuracy: {1}%".format(self.clf, self.get_accuracy()))
+        self.data_points
         
-    
     def load_npy(self):
         actions = np.load('actions.npy')
         obs = np.load('obs.npy')
+
+        self.data_points = len(actions)
 
         split = int(len(actions)/10)
 
@@ -37,7 +38,8 @@ class Classifer():
     def get_accuracy(self):
         test_preds = self.model.predict(self.test_obs)
         acc = accuracy_score(self.test_actions, test_preds)
-        return round(acc, 4)*100
+        print("{0} has accuracy: {1}%, with {2} data points".format(self.clf, round(acc, 4)*100, self.data_points))
+        return acc
 
 class SVM_Agent(Classifer):
     
@@ -62,6 +64,37 @@ class DT_Agent(Classifer):
 
     def init_model(self):
         return tree.DecisionTreeClassifier()
+
+class Ensemble_Agent(Classifer):
+    
+    def __init__(self):
+        self.clf = "Ensemble"
+        self.model = self.init_model()
+        self.train_obs, self.train_actions, self.test_obs, self.test_actions = self.load_npy()
+        self.train_model()
+        
+    def init_model(self):
+        return [tree.DecisionTreeClassifier(), GaussianNB(), svm.SVC()]
+    
+    def predict_action(self, obs):
+        actions = []
+        for m in self.model:
+            action = m.predict(obs)
+            actions.append(action[0])
+        action = np.argmax(np.bincount(actions))
+        return action
+    
+    def train_model(self):
+        for m in range(len(self.model)):
+            self.model[m].fit(self.train_obs, self.train_actions)
+    
+    def get_accuracy(self):
+        test_preds = []
+        for ob in self.test_obs:
+            test_preds.append(self.predict_action([ob]))
+        acc = accuracy_score(self.test_actions, test_preds)
+        print("{0} has accuracy: {1}%".format(self.clf, (round(acc, 4)*100)))
+        return acc
 
 
 

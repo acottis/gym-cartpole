@@ -29,8 +29,6 @@ class NN_Agent():
 
         return train_obs, train_actions, test_obs, test_actions
 
-
-
     def train_model(self, train_features, train_labels):  
         model = keras.Sequential([
                             keras.layers.Flatten(),

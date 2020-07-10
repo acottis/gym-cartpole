@@ -1,7 +1,7 @@
 import gym
 import numpy as np
 from cartnn import NN_Agent
-from cart_classifers import SVM_Agent, NB_Agent, DT_Agent
+from cart_classifers import SVM_Agent, NB_Agent, DT_Agent, Ensemble_Agent
 import time
 import sys
 
@@ -27,27 +27,19 @@ class play_cart(object):
         elif self.clf == "DT":
             self.agent = DT_Agent()
         elif self.clf == "Ensemble":
-            self.agents = [NB_Agent(), DT_Agent(), SVM_Agent()]
+            self.agent = Ensemble_Agent()
         else:
             print("{0} is not a valid classifier selected".format(self.clf))
             sys.exit()
         self.play()
 
     def choose_action(self, observation):
-        if self.clf == "SVM" or self.clf == "NB" or self.clf == "DT":
+        if self.clf == "SVM" or self.clf == "NB" or self.clf == "DT" or self.clf == "Ensemble":
             action = self.agent.predict_action([observation])
             return action
         elif self.clf == "NN":
             obs = np.reshape(observation, [1,4])
             action = self.agent.predict_action(obs)
-            return action
-        if self.clf == "Ensemble":
-            actions = []
-            for a in self.agents:
-                action = a.predict_action([observation])
-                actions.append(action)
-            # Finds the most common predicted action
-            action = np.argmax(np.bincount(actions))
             return action
 
     def play(self):
@@ -59,7 +51,7 @@ class play_cart(object):
             action = 0
 
             while not done:
-                #env.render()
+                env.render()
                 #time.sleep(0.1)
                 obs, reward, done,_ = env.step(action)
                 action = self.choose_action(obs)
@@ -70,8 +62,14 @@ class play_cart(object):
                     print(total_reward)
         env.close()
 
-
+def get_accuracy():
+    NN_Agent().get_accuracy()
+    SVM_Agent().get_accuracy()
+    DT_Agent().get_accuracy()
+    NB_Agent().get_accuracy()
+    Ensemble_Agent().get_accuracy()
 
 if __name__ == "__main__":
-    play_cart(CLASSIFER)
+    #play_cart(CLASSIFER)
+    get_accuracy()
 
