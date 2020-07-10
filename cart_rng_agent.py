@@ -4,8 +4,8 @@ import numpy as np
 import random
 
 ATTEMPTS = 600
-AGENT_RESETS = 10
-BAD_ACTIONS = 18
+AGENT_RESETS = 15
+BAD_ACTIONS = 20
 
 class Random_Agent():
 
@@ -66,9 +66,12 @@ class Random_Agent():
                     if done:
                         if current_loop_reward > highest_reward:
                             highest_reward = current_loop_reward
-                            if current_loop_reward > 20:
+                            if current_loop_reward > 25:
                                 best_actions = actions[:len(actions)-self.bad_actions]
                                 best_obs = obs[:len(actions)-self.bad_actions]
+                            elif current_loop_reward > 50:
+                                best_actions = actions[:len(actions)-10]
+                                best_obs = obs[:len(actions)-10]
 
             #print("Highest reward this iteration:", highest_reward)
             self.collected_actions += best_actions

@@ -19,7 +19,7 @@ class NN_Agent():
         actions = np.load('actions.npy')
         obs = np.load('obs.npy')
 
-        split = int(len(actions)/10)
+        split = int(len(actions)/20)
 
         train_actions = actions[:-split]
         test_actions = actions[-split:]

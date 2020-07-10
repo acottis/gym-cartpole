@@ -1,7 +1,7 @@
 import gym
 import numpy as np
 from cart_nn import NN_Agent
-from cart_classifers import SVM_Agent, NB_Agent, DT_Agent, Ensemble_Agent
+from cart_classifers import SVM_Agent, NB_Agent, DT_Agent, AB_Agent, Ensemble_Agent
 from cart_rng_agent import Random_Agent
 import time
 import sys
@@ -9,11 +9,12 @@ import sys
 ATTEMPTS = 10
 
 ## PICK CLASSIFIER
-CLASSIFER = "SVM" # Support Vector Machines
+#CLASSIFER = "SVM" # Support Vector Machines
+#CLASSIFER = "AB" # Ada Boost
 #CLASSIFER = "NN" # Neural Network
 #CLASSIFER = "NB" # Naive Bayes
 #CLASSIFER = "DT" # Decision Tree
-#CLASSIFER = "Ensemble"
+CLASSIFER = "Ensemble"
 
 class play_cart(object):
 
@@ -27,6 +28,8 @@ class play_cart(object):
             self.agent = NN_Agent()
         elif self.clf == "DT":
             self.agent = DT_Agent()
+        elif self.clf == "AB":
+            self.agent = AB_Agent()
         elif self.clf == "Ensemble":
             self.agent = Ensemble_Agent()
         else:
@@ -35,7 +38,7 @@ class play_cart(object):
         self.play()
 
     def choose_action(self, observation):
-        if self.clf == "SVM" or self.clf == "NB" or self.clf == "DT" or self.clf == "Ensemble":
+        if self.clf == "SVM" or self.clf == "NB" or self.clf == "DT" or self.clf == "AB" or self.clf == "Ensemble":
             action = self.agent.predict_action([observation])
             return action
         elif self.clf == "NN":
@@ -68,6 +71,7 @@ def get_accuracy():
     SVM_Agent().get_accuracy()
     DT_Agent().get_accuracy()
     NB_Agent().get_accuracy()
+    AB_Agent().get_accuracy()
     Ensemble_Agent().get_accuracy()
 
 if __name__ == "__main__":

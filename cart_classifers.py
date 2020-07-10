@@ -1,6 +1,7 @@
 from sklearn import svm, tree
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
+from sklearn.ensemble import AdaBoostClassifier
 import numpy as np
 
 class Classifer():
@@ -18,7 +19,7 @@ class Classifer():
 
         self.data_points = len(actions)
 
-        split = int(len(actions)/10)
+        split = int(len(actions)/20)
 
         train_actions = actions[:-split]
         test_actions = actions[-split:]
@@ -65,13 +66,21 @@ class DT_Agent(Classifer):
     def init_model(self):
         return tree.DecisionTreeClassifier()
 
+class AB_Agent(Classifer):
+
+    def __init__(self):
+        super().__init__("AB")
+
+    def init_model(self):
+        return AdaBoostClassifier(n_estimators=50, random_state=10, learning_rate=1)
+
 class Ensemble_Agent(Classifer):
     
     def __init__(self):
         super().__init__("Ensemble")
 
     def init_model(self):
-        return [tree.DecisionTreeClassifier(), GaussianNB(), svm.SVC()]
+        return [tree.DecisionTreeClassifier(), GaussianNB(), svm.SVC(), AdaBoostClassifier(n_estimators=50, random_state=10, learning_rate=1)]
     
     def predict_action(self, obs):
         actions = []
