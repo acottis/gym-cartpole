@@ -4,7 +4,7 @@ import numpy as np
 import random
 
 ATTEMPTS = 600
-AGENT_RESETS = 5
+AGENT_RESETS = 10
 BAD_ACTIONS = 18
 
 class Random_Agent():

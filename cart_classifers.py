@@ -47,7 +47,7 @@ class SVM_Agent(Classifer):
         super().__init__("SVM")
 
     def init_model(self):
-        return svm.SVC()
+        return svm.SVC(C=1, kernel='linear')
 
 class NB_Agent(Classifer):
     
