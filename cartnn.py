@@ -4,9 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Global vars
-EPOCH = 30
+EPOCH = 5
 
-class Agent():
+class NN_Agent():
 
     def __init__(self):
         self.epoch = EPOCH
@@ -47,7 +47,6 @@ class Agent():
     def predict_action(self, observation):
         pred = self.model.predict(observation)
         action = np.argmax(pred)
-
         return action
 
     def get_accuracy(self):
