@@ -68,11 +68,8 @@ class DT_Agent(Classifer):
 class Ensemble_Agent(Classifer):
     
     def __init__(self):
-        self.clf = "Ensemble"
-        self.model = self.init_model()
-        self.train_obs, self.train_actions, self.test_obs, self.test_actions = self.load_npy()
-        self.train_model()
-        
+        super().__init__("Ensemble")
+
     def init_model(self):
         return [tree.DecisionTreeClassifier(), GaussianNB(), svm.SVC()]
     
@@ -93,7 +90,7 @@ class Ensemble_Agent(Classifer):
         for ob in self.test_obs:
             test_preds.append(self.predict_action([ob]))
         acc = accuracy_score(self.test_actions, test_preds)
-        print("{0} has accuracy: {1}%".format(self.clf, (round(acc, 4)*100)))
+        print("{0} has accuracy: {1}%, with {2} data points".format(self.clf, round(acc, 4)*100, self.data_points))
         return acc
 
 

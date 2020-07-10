@@ -70,6 +70,6 @@ def get_accuracy():
     Ensemble_Agent().get_accuracy()
 
 if __name__ == "__main__":
-    #play_cart(CLASSIFER)
-    get_accuracy()
+    play_cart(CLASSIFER)
+    #get_accuracy()
 
