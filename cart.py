@@ -2,18 +2,17 @@ import gym
 import numpy as np
 from cartnn import NN_Agent
 from cart_classifers import SVM_Agent, NB_Agent, DT_Agent, Ensemble_Agent
-from cart_rng_agent import Random_Agent
 import time
 import sys
 
 ATTEMPTS = 10
 
 ## PICK CLASSIFIER
-CLASSIFER = "SVM" # Support Vector Machines
+#CLASSIFER = "SVM" # Support Vector Machines
 #CLASSIFER = "NN" # Neural Network
 #CLASSIFER = "NB" # Naive Bayes
 #CLASSIFER = "DT" # Decision Tree
-#CLASSIFER = "Ensemble"
+CLASSIFER = "Ensemble"
 
 class play_cart(object):
 
@@ -71,14 +70,6 @@ def get_accuracy():
     Ensemble_Agent().get_accuracy()
 
 if __name__ == "__main__":
-    ## Generates seed Data
-    Random_Agent()
-
-    ## Shows all accuracies
-    get_accuracy()
-
-    ## Starts game
     play_cart(CLASSIFER)
-    
-
+    #get_accuracy()
 

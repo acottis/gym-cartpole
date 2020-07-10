@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow import keras
 
 # Global vars
-EPOCH = 10
+EPOCH = 5
 
 class NN_Agent():
 
