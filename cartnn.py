@@ -1,14 +1,15 @@
+import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-import numpy as np
-import matplotlib.pyplot as plt
 
 # Global vars
 EPOCH = 5
 
 class NN_Agent():
 
+
     def __init__(self):
+
         self.epoch = EPOCH
         self.train_obs, self.train_actions, self.test_obs, self.test_actions = self.load_npy() 
         self.model = self.train_model(train_features=self.train_obs, train_labels=self.train_actions)
