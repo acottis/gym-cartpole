@@ -3,9 +3,9 @@ import gym
 import numpy as np
 import random
 
-ATTEMPTS = 600
+ATTEMPTS = 700
 AGENT_RESETS = 15
-BAD_ACTIONS = 20
+BAD_ACTIONS = 21
 
 class Random_Agent():
 
